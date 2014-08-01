@@ -12,7 +12,7 @@ description = {
       interfaces, and modules.
     ]],
     homepage = "https://github.com/andremm/typedlua",
-    license = "private"
+    license = "MIT/X11"
 }
 dependencies = {
     "lua ~> 5.2",
