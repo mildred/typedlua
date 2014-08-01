@@ -1295,7 +1295,7 @@ function checker.typecheck (ast, subject, filename)
   assert(type(subject) == "string")
   assert(type(filename) == "string")
   local env = new_env(subject, filename)
-  local ENV = { tag = "Id", [1] = "_ENV", [2] = assert(tldparser.parse("typedlua/lsl.tld", false)) }
+  local ENV = { tag = "Id", [1] = "_ENV", [2] = assert(tldparser.parse("typedlua/lsl.tld", false, require("typedlua.lsl"))) }
   ENV[2].open = true
   begin_function(env)
   begin_scope(env)

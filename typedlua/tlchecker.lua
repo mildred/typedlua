@@ -743,7 +743,7 @@ function tlchecker.typecheck (ast, subject, filename, strict, warnings)
   tlst.begin_function(env)
   tlst.begin_scope(env)
   tlst.set_vararg(env, String)
-  local _env = tlast.ident(0, "_ENV", assert(tldparser.parse("typedlua/lsl.tld", strict)))
+  local _env = tlast.ident(0, "_ENV", assert(tldparser.parse("typedlua/lsl.tld", strict, require("typedlua.lsl"))))
   set_type(_env, _env[2])
   tlst.set_local(env, _env)
   for k, v in ipairs(ast) do
