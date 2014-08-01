@@ -15,6 +15,8 @@ local PRINTAST = false
 local STRICT = false
 local WARNINGS = false
 
+local error_exit_code = 1
+
 local progname = PROGNAME
 
 local USAGE = [[
@@ -25,8 +27,12 @@ Available options are:
 -o name	output to file 'name' (default is '%s')
 -p	print the AST
 -s	strict mode on
+-S	strict mode off
 -v	print current version
 -w	consistent-subtyping warnings on
+-W	consistent-subtyping warnings off
+-k	return with success even in case of errors on
+-K	return with success even in case of errors off
 ]]
 
 local function usage (msg)
@@ -57,11 +63,19 @@ local function doargs ()
       PRINTAST = true
     elseif arg[i] == "-s" then
       STRICT = true
+    elseif arg[i] == "-S" then
+      STRICT = false
     elseif arg[i] == "-v" then
       io.write(string.format("Typed Lua %s\n", VERSION))
       os.exit(0)
     elseif arg[i] == "-w" then
       WARNINGS = true
+    elseif arg[i] == "-W" then
+      WARNINGS = false
+    elseif arg[i] == "-k" then
+      error_exit_code = 0
+    elseif arg[i] == "-K" then
+      error_exit_code = 1
     else
       usage(string.format("'%s' unknown option", arg[i]))
     end
@@ -114,10 +128,15 @@ if PRINTAST then
   os.exit(0)
 end
 
+local exit_code = 0
+
 ast, error_msg = tlchecker.typecheck(ast, subject, filename, STRICT, WARNINGS)
-if error_msg then print(error_msg) end
+if error_msg then
+  print(error_msg)
+  exit_code = error_exit_code
+end
 
 local generated_code = tlcode.generate(ast)
 setcontents(generated_code, OUTPUT)
 
-os.exit(0)
+os.exit(exit_code)
